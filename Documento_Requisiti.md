@@ -162,9 +162,7 @@ Ritorno al menu o uscita
 
 
 ## 14. Gannt/Flowchart
-<img width="1231" height="644" alt="Screenshot 2026-05-07 123852" src="https://github.com/user-attachments/assets/14f098ba-0533-4c53-a8c5-927b3e3b40e0" />
-<img width="1063" height="733" alt="Screenshot 2026-05-07 123930" src="https://github.com/user-attachments/assets/5d7f5b9f-91e5-4af0-88b4-88c0a492185c" />
-<img width="597" height="406" alt="Screenshot 2026-05-07 123938" src="https://github.com/user-attachments/assets/e524aa2c-3c39-4881-9c05-5f2c8ee8f121" />
+<img width="1920" height="527" alt="Screenshot 2026-05-07 124722" src="https://github.com/user-attachments/assets/f1f36983-536f-48dc-8bfc-62032cdba60e" />
 
 ---
 
