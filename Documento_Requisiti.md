@@ -1,3 +1,4 @@
+<img width="1899" height="323" alt="Screenshot 2026-05-07 130614" src="https://github.com/user-attachments/assets/b615d491-f6f2-4525-a50b-88f8a4829331" />
 # 🎰 Documento dei Requisiti  
 ## Progetto: Casino Console – Mini Gambling Games
 
@@ -161,7 +162,7 @@ Ritorno al menu o uscita
 
 
 ## 14. Gannt/Flowchart
-<img width="1893" height="307" alt="Screenshot 2026-05-07 130019" src="https://github.com/user-attachments/assets/4f749ac7-1d61-4d97-a5a0-6d9e8fdc06cf" />
+<img width="1899" height="323" alt="Screenshot 2026-05-07 130614" src="https://github.com/user-attachments/assets/b615d491-f6f2-4525-a50b-88f8a4829331" />
 
 ---
 
