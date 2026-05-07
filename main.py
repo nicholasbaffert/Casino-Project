@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
-import json
-import os
+import json, os
+from Game import blackjack
 
 # Nome del file database
 DB_FILE = "utenti.json"
@@ -16,6 +16,11 @@ def carica_dati():
 def salva_dati(dati):
     with open(DB_FILE, "w") as f:
         json.dump(dati, f, indent=4)
+
+    def avvia_blackjack_game(self):
+        # Chiama la funzione 'start_game' (o il nome che hai dato nel file blackjack.py)
+        # Passiamo i dati necessari
+        blackjack.start_game(self.root, self.utente_attuale, self.saldo_attuale)
 
 class CasinoApp:
     def __init__(self, root):
@@ -80,9 +85,10 @@ class CasinoApp:
 
         tk.Label(self.container, text="SCEGLI UN GIOCO", font=("Arial", 14)).pack(pady=10)
 
-        # Bottoni Giochi
+        # Bottoni Giochi - ERRORE: Il bottone "Balckjack" e "Esci" non vengono visualizzati
         tk.Button(self.container, text="Roulette 🎡", width=20, command=lambda: self.gioca("Roulette")).pack(pady=5)
         tk.Button(self.container, text="Dadi 🎲 (-10€)", width=20, command=self.gioca_dadi).pack(pady=5)
+        tk.Button(self.container, text="Blackjack 🃏", width=20, command=self.avvia_blackjack_game).pack(pady=5)
         tk.Button(self.container, text="Esci", width=20, fg="red", command=self.esci).pack(pady=20)
 
     def gioca_dadi(self):
