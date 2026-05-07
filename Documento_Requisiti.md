@@ -146,10 +146,10 @@ Ritorno al menu o uscita
 ---
 
 ## 12. 📅 Cronoprogramma
-- Settimana 1 → progettazione
-- Settimana 2 → menu + saldo
-- Settimana 3 → giochi
-- Settimana 4 → test e rifinitura
+- Settimana 1 → Idealizzazione progetto/creazione file
+- Settimana 2 → Sviluppo vari giochi
+- Settimana 3 → Unificazione dei giochi in un menu
+- Settimana 4 → Controllo bugs e consegna progetto
 
 ---
 
@@ -158,6 +158,7 @@ Ritorno al menu o uscita
 - time → pause ed effetti (opzionale)
 - colorama → colori in console (opzionale)
 - json → salvataggio utente e saldo
+- tkinter → interfaccia menu interagibile
 
 
 ## 14. Gannt/Flowchart
