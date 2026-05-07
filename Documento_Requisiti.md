@@ -1,3 +1,4 @@
+
 # 🎰 Documento dei Requisiti  
 ## Progetto: Casino Console – Mini Gambling Games
 
@@ -159,6 +160,9 @@ Ritorno al menu o uscita
 - colorama → colori in console (opzionale)
 - json → salvataggio utente e saldo
 
+
+## 14. Gannt/Flowchart
+<img width="540" height="462" alt="Screenshot 2026-05-07 121549" src="https://github.com/user-attachments/assets/7abd0799-c5d2-4545-9323-d8241b3aa96d" />
 ---
 
 ## ⚖️ Nota finale
