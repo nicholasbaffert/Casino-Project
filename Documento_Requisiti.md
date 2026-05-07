@@ -1,5 +1,3 @@
-<img width="1893" height="307" alt="Screenshot 2026-05-07 130019" src="https://github.com/user-attachments/assets/a80d6121-2d05-4cab-bc30-7b08833bdb63" />
-
 # 🎰 Documento dei Requisiti  
 ## Progetto: Casino Console – Mini Gambling Games
 
