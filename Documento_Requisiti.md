@@ -1,4 +1,3 @@
-
 # 🎰 Documento dei Requisiti  
 ## Progetto: Casino Console – Mini Gambling Games
 
@@ -147,10 +146,10 @@ Ritorno al menu o uscita
 ---
 
 ## 12. 📅 Cronoprogramma
-- Settimana 1 → progettazione
-- Settimana 2 → menu + saldo
-- Settimana 3 → giochi
-- Settimana 4 → test e rifinitura
+- Settimana 1 → Idealizzazione progetto/creazione file
+- Settimana 2 → Sviluppo vari giochi
+- Settimana 3 → Unificazione dei giochi in un menu
+- Settimana 4 → Controllo bugs e consegna progetto
 
 ---
 
@@ -159,10 +158,16 @@ Ritorno al menu o uscita
 - time → pause ed effetti (opzionale)
 - colorama → colori in console (opzionale)
 - json → salvataggio utente e saldo
+- tkinter → interfaccia menu interagibile
 
 
 ## 14. Gannt/Flowchart
-<img width="540" height="462" alt="Screenshot 2026-05-07 121549" src="https://github.com/user-attachments/assets/7abd0799-c5d2-4545-9323-d8241b3aa96d" />
+<img width="1899" height="323" alt="Screenshot 2026-05-07 130614" src="https://github.com/user-attachments/assets/b615d491-f6f2-4525-a50b-88f8a4829331" />
+
+---
+
+<img width="1920" height="527" alt="Screenshot 2026-05-07 124722" src="https://github.com/user-attachments/assets/f1f36983-536f-48dc-8bfc-62032cdba60e" />
+
 ---
 
 ## ⚖️ Nota finale
