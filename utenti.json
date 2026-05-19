@@ -1,10 +1,42 @@
 {
-    "Rafael": 1000,
-<<<<<<< HEAD
-    "nicholas": 1500,
-    "p": 1000
-=======
-    "ale p": 1000,
-    "asd": 1000
->>>>>>> 0324c3962b1484afdf1cae6f8b246e237aa61fbb
+    "nicholas": {
+        "saldo": 1035,
+        "cronologia": [
+            {
+                "gioco": "Inizio",
+                "variazione": 0,
+                "saldo_risultante": 1000
+            },
+            {
+                "gioco": "Roulette",
+                "variazione": 0,
+                "saldo_risultante": 1000
+            },
+            {
+                "gioco": "Dadi",
+                "variazione": 15,
+                "saldo_risultante": 1015
+            },
+            {
+                "gioco": "Dadi",
+                "variazione": 15,
+                "saldo_risultante": 1030
+            },
+            {
+                "gioco": "Dadi",
+                "variazione": -10,
+                "saldo_risultante": 1020
+            },
+            {
+                "gioco": "Dadi",
+                "variazione": 15,
+                "saldo_risultante": 1035
+            },
+            {
+                "gioco": "Roulette",
+                "variazione": 0,
+                "saldo_risultante": 1035
+            }
+        ]
+    }
 }
