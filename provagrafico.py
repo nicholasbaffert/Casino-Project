@@ -6,12 +6,12 @@ from tkinter import messagebox       # Finestrelle di avviso pop-up
 import json                          # Gestisce il salvataggio dei dati in formato JSON
 import os                            # Controlla la presenza di file sul computer
 import random                        # Genera risultati casuali per i giochi
-# import matplotlib.pyplot as plt      # Disegna e mostra i grafici a schermo
+import matplotlib.pyplot as plt      # Disegna e mostra i grafici a schermo
 
-# Importa il gioco della Roulette dalla cartella Game (file roulette.py)
-from Game.roulette import Roulette
+# Importazione delle sale da gioco dalle rispettive cartelle/file
+from Game.roulette import Roulette  
+from Game import blackjack           # <-- IMPORTAZIONE DEL FILE BLACKJACK DEL TUO COMPAGNO
 
-from Game.blackjack import BlackjackApp as Blackjack
 
 DB_FILE = "utenti.json"              # Nome del file che fa da database per i soldi
 
@@ -47,8 +47,8 @@ class CasinoApp:
         """ Configurazione iniziale della finestra con Tema Dark """
         self.root = root                         
         self.root.title("Casino Gold Premium")           
-        self.root.geometry("400x530")            # Altezza aumentata per un layout più arioso
-        self.root.config(bg="#1a1a1a")           # Sfondo scuro dell'applicazione di base
+        self.root.geometry("400x530")            
+        self.root.config(bg="#1a1a1a")           
         
         self.utente_attuale = None               
         self.saldo_attuale = 0                   
@@ -78,7 +78,7 @@ class CasinoApp:
         # TITOLO PRINCIPALE: Scrittura dorata elegante
         titolo = tk.Label(
             self.container, 
-            text="CASINÒ", 
+            text="CASINÒ GOLD", 
             font=("Helvetica", 24, "bold"), 
             fg="#ffd700",  
             bg="#1a1a1a"
@@ -88,7 +88,7 @@ class CasinoApp:
         # SOTTOTITOLO: Stile club d'élite
         sottotitolo = tk.Label(
             self.container, 
-            text="« Benvenuto nel Club Della 3M »", 
+            text="« Benvenuto nel Club Esclusivo »", 
             font=("Georgia", 10, "italic"), 
             fg="#b3b3b3",  
             bg="#1a1a1a"
@@ -181,14 +181,14 @@ class CasinoApp:
             info_panel, 
             text=f"👤 {self.utente_attuale}     |     💰 {self.saldo_attuale}€", 
             font=("Helvetica", 11, "bold"), 
-            fg="#ffd700",  # Testo oro per il bilancio
+            fg="#ffd700",  
             bg="#262626"
         )
         self.label_info.pack(pady=12)
 
         tk.Label(self.container, text="SELEZIONA UNA SALA DA GIOCO", font=("Helvetica", 12, "bold"), fg="#ffffff", bg="#1a1a1a").pack(pady=(0, 15))
 
-        # Stile standard riutilizzabile per i bottoni dei giochi (Scuro con testo bianco)
+        # Stile standard riutilizzabile per i bottoni dei giochi
         stile_bottone_gioco = {
             "font": ("Helvetica", 11, "bold"),
             "bg": "#2d2d2d",
@@ -241,21 +241,15 @@ class CasinoApp:
 
 
 # ==============================================================================
-# 6. LOGICA DEI GIOCHI E AGGIORNAMENTO DATI
+# 6. LOGICA DEI GIOCHI E AGGIORNAMENTO DATI (ROULETTE, DADI E BLACKJACK)
 # ==============================================================================
     def avvia_roulette_game(self):
-        """ Nasconde il menu e apre la finestra esterna della Roulette """
+        """ Nasconde il menu e apre la finestra della Roulette """
         self.root.withdraw()                     
-        Roulette(self.root, self.saldo_attuale, self.aggiorna_saldo_da_gioco)
+        Roulette(self.root, self.saldo_attuale, self.aggiorna_saldo_da_roulette)
 
-    def avvia_blackjack_game(self):
-        """ Avviso temporaneo in attesa di blackjack """
-        self.root.withdraw()
-
-        Blackjack(self.root, self.saldo_attuale, self.aggiorna_saldo_da_gioco)
-
-    def aggiorna_saldo_da_gioco(self, nuovo_saldo):
-        """ Funzione automatica richiamata dalla Roulette quando viene chiusa """
+    def aggiorna_saldo_da_roulette(self, nuovo_saldo):
+        """ Funzione richiamata dalla Roulette quando si chiude """
         variazione = nuovo_saldo - self.saldo_attuale 
         self.saldo_attuale = nuovo_saldo         
         
@@ -271,6 +265,31 @@ class CasinoApp:
             "saldo_risultante": self.saldo_attuale
         })
         salva_dati(dati)                         
+
+    def avvia_blackjack_game(self):
+        """ Nasconde il menu e apre il Blackjack del compagno passandogli la funzione di ritorno """
+        self.root.withdraw()                     
+        # Esegue la funzione 'start_game' dentro il file blackjack.py dei tuoi compagni
+        blackjack.start_game(self.root, self.saldo_attuale, self.aggiorna_saldo_da_blackjack)
+
+    def aggiorna_saldo_da_blackjack(self, nuovo_saldo):
+        """ AGGIORNATO: Funzione automatica chiamata dal Blackjack alla chiusura """
+        variazione = nuovo_saldo - self.saldo_attuale  # Calcola l'esito finanziario della sessione
+        self.saldo_attuale = nuovo_saldo              # Sincronizza il saldo locale
+        
+        self.root.deiconify()                         # Rende di nuovo visibile questo menu principale
+        self.label_info.config(text=f"👤 {self.utente_attuale}     |     💰 {self.saldo_attuale}€")
+        
+        dati = carica_dati()
+        dati[self.utente_attuale]["saldo"] = self.saldo_attuale
+        
+        # Inserisce la giocata a Blackjack nel file per visualizzarla sulle linee del grafico
+        dati[self.utente_attuale]["cronologia"].append({
+            "gioco": "Blackjack",
+            "variazione": variazione,
+            "saldo_risultante": self.saldo_attuale
+        })
+        salva_dati(dati)                              # Salva le modifiche sul database JSON
 
     def gioca_dadi(self):
         """ Minigioco istantaneo dei dadi incorporato """
@@ -328,8 +347,8 @@ class CasinoApp:
         plt.rcParams['ytick.color'] = '#b3b3b3'
         
         fig, ax = plt.subplots(figsize=(9, 4.5))
-        fig.patch.set_facecolor('#1a1a1a') # Sfondo esterno nero fumo
-        ax.set_facecolor('#262626')       # Sfondo interno della griglia grigio scuro
+        fig.patch.set_facecolor('#1a1a1a') 
+        ax.set_facecolor('#262626')       
         
         # Disegna la linea dell'andamento (colore Oro lucido con marker bianchi)
         ax.plot(indici_giocate, saldi_storici, marker='o', color='#ffd700', markerfacecolor='#ffffff', markeredgecolor='#ffd700', linewidth=2, label="Saldo")
@@ -338,7 +357,7 @@ class CasinoApp:
         ax.set_title(f"Andamento Finanziario di {self.utente_attuale}", fontsize=13, fontweight='bold', pad=15, color='#ffd700')
         ax.set_xlabel("Puntate / Eventi effettuati", fontsize=10)
         ax.set_ylabel("Capitale (€)", fontsize=10)
-        ax.grid(True, linestyle='--', color='#404040', alpha=0.6) # Griglia grigio scura sfumata
+        ax.grid(True, linestyle='--', color='#404040', alpha=0.6) 
         
         # Scritta del nome del gioco sopra ogni rispettivo punto
         for idx, gioco in enumerate(nomi_giochi):
@@ -368,4 +387,4 @@ class CasinoApp:
 if __name__ == "__main__":
     root = tk.Tk()                               
     app = CasinoApp(root)                        
-    root.mainloop()
+    root.mainloop()                              

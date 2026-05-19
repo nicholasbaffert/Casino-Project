@@ -1,6 +1,6 @@
 {
     "nicholas": {
-        "saldo": 1035,
+        "saldo": 560,
         "cronologia": [
             {
                 "gioco": "Inizio",
@@ -36,6 +36,11 @@
                 "gioco": "Roulette",
                 "variazione": 0,
                 "saldo_risultante": 1035
+            },
+            {
+                "gioco": "Roulette",
+                "variazione": -475,
+                "saldo_risultante": 560
             }
         ]
     },
