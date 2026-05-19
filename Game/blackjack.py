@@ -5,11 +5,20 @@ from tkinter import messagebox
 
 class BlackjackApp:
 
-    def __init__(self, root):
-        self.root = root
+    def __init__(self, root, saldo_attuale, aggiorna_saldo_da_gioco):
+        self.main_root = root
+        self.root = tk.Toplevel(root)
+        self.saldo_attuale = saldo_attuale
+        self.aggiorna_saldo_da_gioco = aggiorna_saldo_da_gioco
         self.root.title("Blackjack")
-        self.root.geometry("500x550")
+        self.root.geometry("500x650")  # Allungato leggermente per l'area puntate
         self.root.configure(bg="#2c3e50")
+
+        # Intercettiamo la "X" della finestra
+        self.root.protocol("WM_DELETE_WINDOW", self.chiudi_gioco)
+
+        # Variabili di gioco
+        self.puntata_attuale = 0
 
         # Dati del mazzo
         self.semi_carte = {
@@ -37,8 +46,8 @@ class BlackjackApp:
         # Creazione UI
         self.crea_interfaccia()
 
-        # Avvio prima partita
-        self.avvia_nuova_partita()
+        # Prepariamo la schermata per la prima puntata
+        self.attendi_puntata()
 
     def crea_interfaccia(self):
         # Titolo
@@ -51,6 +60,43 @@ class BlackjackApp:
         )
         titolo.pack(pady=10)
 
+        # Mostra il saldo
+        self.lbl_saldo = tk.Label(
+            self.root,
+            text=f"Saldo: {self.saldo_attuale}€",
+            font=("Helvetica", 14, "bold"),
+            bg="#2c3e50",
+            fg="gold",
+        )
+        self.lbl_saldo.pack(pady=5)
+
+        # AREA PUNTATA (Nuova)
+        self.frame_puntata = tk.Frame(self.root, bg="#2c3e50")
+        self.frame_puntata.pack(pady=10)
+
+        tk.Label(
+            self.frame_puntata,
+            text="Inserisci Puntata (€):",
+            font=("Helvetica", 11, "bold"),
+            bg="#2c3e50",
+            fg="white",
+        ).grid(row=0, column=0, padx=5)
+
+        self.entry_puntata = tk.Entry(
+            self.frame_puntata, font=("Helvetica", 11), width=10
+        )
+        self.entry_puntata.grid(row=0, column=1, padx=5)
+        self.entry_puntata.insert(0, "10")  # Valore di default
+
+        self.btn_punta = tk.Button(
+            self.frame_puntata,
+            text="Scommetti 💰",
+            font=("Helvetica", 10, "bold"),
+            bg="#f1c40f",
+            command=self.gestisci_puntata,
+        )
+        self.btn_punta.grid(row=0, column=2, padx=5)
+
         # Area Banco
         self.frame_banco = tk.LabelFrame(
             self.root,
@@ -61,7 +107,7 @@ class BlackjackApp:
             padx=10,
             pady=10,
         )
-        self.frame_banco.pack(fill="x", padx=20, pady=10)
+        self.frame_banco.pack(fill="x", padx=20, pady=5)
 
         self.lbl_carte_banco = tk.Label(
             self.frame_banco,
@@ -93,7 +139,7 @@ class BlackjackApp:
             padx=10,
             pady=10,
         )
-        self.frame_giocatore.pack(fill="x", padx=20, pady=10)
+        self.frame_giocatore.pack(fill="x", padx=20, pady=5)
 
         self.lbl_carte_giocatore = tk.Label(
             self.frame_giocatore,
@@ -117,7 +163,7 @@ class BlackjackApp:
 
         # Area Pulsanti di Gioco
         self.frame_pulsanti = tk.Frame(self.root, bg="#2c3e50")
-        self.frame_pulsanti.pack(pady=15)
+        self.frame_pulsanti.pack(pady=10)
 
         self.btn_hit = tk.Button(
             self.frame_pulsanti,
@@ -141,16 +187,66 @@ class BlackjackApp:
         )
         self.btn_stand.grid(row=0, column=1, padx=10)
 
-        # # Pulsante Nuova Partita
-        # self.btn_restart = tk.Button(
-        #     self.root,
-        #     text="Nuova Partita",
-        #     font=("Helvetica", 12, "bold"),
-        #     bg="#3498db",
-        #     fg="white",
-        #     command=self.avvia_nuova_partita,
-        # )
-        # self.btn_restart.pack(pady=10)
+        # Bottone per uscire
+        self.btn_exit = tk.Button(
+            self.root,
+            text="Torna al Menu Principale ↩",
+            font=("Helvetica", 11, "bold"),
+            bg="#7f8c8d",
+            fg="white",
+            command=self.chiudi_gioco,
+        )
+        self.btn_exit.pack(pady=5)
+
+    def attendi_puntata(self):
+        # Blocca i bottoni di gioco finché non si punta
+        self.btn_hit.config(state="disabled")
+        self.btn_stand.config(state="disabled")
+        self.btn_punta.config(state="normal")
+        self.entry_puntata.config(state="normal")
+
+        # Pulisce i vecchi testi grafici
+        self.lbl_carte_giocatore.config(text="Effettua una puntata per iniziare")
+        self.lbl_punti_giocatore.config(text="")
+        self.lbl_carte_banco.config(text="In attesa delle fiches...")
+        self.lbl_punti_banco.config(text="")
+
+    def gestisci_puntata(self):
+        try:
+            puntata = int(self.entry_puntata.get().strip())
+        except ValueError:
+            messagebox.showerror(
+                "Errore", "Inserisci un numero intero valido!", parent=self.root
+            )
+            return
+
+        if puntata <= 0:
+            messagebox.showerror(
+                "Errore",
+                "La puntata deve essere maggiore di 0€!",
+                parent=self.root,
+            )
+            return
+
+        if puntata > self.saldo_attuale:
+            messagebox.showerror(
+                "Errore",
+                f"Saldo insufficiente! Hai solo {self.saldo_attuale}€.",
+                parent=self.root,
+            )
+            return
+
+        # Sottrae la puntata e aggiorna le variabili
+        self.puntata_attuale = puntata
+        self.saldo_attuale -= self.puntata_attuale
+        self.lbl_saldo.config(text=f"Saldo: {self.saldo_attuale}€")
+
+        # Disabilita i campi puntata durante la mano
+        self.btn_punta.config(state="disabled")
+        self.entry_puntata.config(state="disabled")
+
+        # Avvia la partita vera e propria
+        self.avvia_nuova_partita()
 
     def inizializza_mazzo(self):
         mazzo = []
@@ -189,7 +285,7 @@ class BlackjackApp:
         self.carte_giocatore = [self.mazzo.pop(), self.mazzo.pop()]
         self.carte_banco = [self.mazzo.pop(), self.mazzo.pop()]
 
-        # Ripristino bottoni
+        # Attiva pulsanti di gioco
         self.btn_hit.config(state="normal")
         self.btn_stand.config(state="normal")
 
@@ -204,14 +300,12 @@ class BlackjackApp:
             self.aggiorna_grafica(nascondi_banco=True)
 
     def aggiorna_grafica(self, nascondi_banco=True):
-        # Aggiornamento Giocatore
         punti_g = self.calcola_punteggio(self.carte_giocatore)
         self.lbl_carte_giocatore.config(
             text=f"🎴 Carte: {self.formatta_mano(self.carte_giocatore)}"
         )
         self.lbl_punti_giocatore.config(text=f"🔢 Punteggio totale: {punti_g}")
 
-        # Aggiornamento Banco
         if nascondi_banco:
             valore, seme = self.carte_banco[0]
             mano_coperta = (
@@ -257,30 +351,57 @@ class BlackjackApp:
         punti_b = self.calcola_punteggio(self.carte_banco)
 
         msg = ""
+        moltiplicatore = 0  # Determina quanto vince il giocatore rispetto alla puntata
 
         if punti_g == 21 and len(self.carte_giocatore) == 2:
             if punti_b == 21 and len(self.carte_banco) == 2:
                 msg = "🤝 Entrambi Blackjack! Pareggio."
+                moltiplicatore = 1  # Restituisce la puntata
             else:
-                msg = "🏆 BLACKJACK! Hai vinto subito!"
+                msg = "🏆 BLACKJACK! Hai vinto!"
+                moltiplicatore = 2.5  # Paga 2.5 volte la puntata (es. punti 10€, riprendi 25€)
         elif punti_b == 21 and len(self.carte_banco) == 2:
             msg = "📉 Il Banco ha fatto Blackjack. Hai perso."
         elif punti_g > 21:
             msg = "📉 Hai sballato! Il Banco vince."
         elif punti_b > 21:
             msg = "🏆 Il Giocatore vince! (Il Banco ha sballato)"
+            moltiplicatore = 2  # Raddoppio
         elif punti_g > punti_b:
             msg = "🏆 Il Giocatore vince!"
+            moltiplicatore = 2  # Raddoppio
         elif punti_b > punti_g:
             msg = "📉 Il Banco vince."
         else:
             msg = "🤝 È un pareggio!"
+            moltiplicatore = 1  # Restituisce la puntata
 
-        messagebox.showinfo("Risultato Finale", msg)
+        # Calcolo vincita reale e accredito sul saldo
+        vincita_reale = int(self.puntata_attuale * moltiplicatore)
+        self.saldo_attuale += vincita_reale
+        self.lbl_saldo.config(text=f"Saldo: {self.saldo_attuale}€")
+
+        messagebox.showinfo("Risultato Finale", msg, parent=self.root)
+
+        # Chiede se rigiocare o tornare al menu
+        scelta = messagebox.askyesno(
+            "Nuova Partita", "Vuoi giocare un'altra mano?", parent=self.root
+        )
+        if scelta:
+            self.attendi_puntata()
+        else:
+            self.chiudi_gioco()
+
+    def chiudi_gioco(self):
+        self.root.destroy()
+        self.aggiorna_saldo_da_gioco(self.saldo_attuale)
 
 
-# Esecuzione dell'applicazione
 if __name__ == "__main__":
     root = tk.Tk()
-    app = BlackjackApp(root)
+
+    def finto_aggiorna_saldo(nuovo_saldo):
+        print(f"Saldo finale salvato: {nuovo_saldo}€")
+
+    app = BlackjackApp(root, 1000, finto_aggiorna_saldo)
     root.mainloop()

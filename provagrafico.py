@@ -6,10 +6,12 @@ from tkinter import messagebox       # Finestrelle di avviso pop-up
 import json                          # Gestisce il salvataggio dei dati in formato JSON
 import os                            # Controlla la presenza di file sul computer
 import random                        # Genera risultati casuali per i giochi
-import matplotlib.pyplot as plt      # Disegna e mostra i grafici a schermo
+# import matplotlib.pyplot as plt      # Disegna e mostra i grafici a schermo
 
 # Importa il gioco della Roulette dalla cartella Game (file roulette.py)
-from Game.roulette import Roulette  
+from Game.roulette import Roulette
+
+from Game.blackjack import BlackjackApp as Blackjack
 
 DB_FILE = "utenti.json"              # Nome del file che fa da database per i soldi
 
@@ -248,7 +250,9 @@ class CasinoApp:
 
     def avvia_blackjack_game(self):
         """ Avviso temporaneo in attesa di blackjack """
-        messagebox.showinfo("Blackjack", "Avvio del gioco Blackjack...")
+        self.root.withdraw()
+
+        Blackjack(self.root, self.saldo_attuale, self.aggiorna_saldo_da_gioco)
 
     def aggiorna_saldo_da_gioco(self, nuovo_saldo):
         """ Funzione automatica richiamata dalla Roulette quando viene chiusa """
@@ -364,4 +368,4 @@ class CasinoApp:
 if __name__ == "__main__":
     root = tk.Tk()                               
     app = CasinoApp(root)                        
-    root.mainloop()                              
+    root.mainloop()

@@ -38,5 +38,35 @@
                 "saldo_risultante": 1035
             }
         ]
+    },
+    "Rafael": {
+        "saldo": 975,
+        "cronologia": [
+            {
+                "gioco": "Inizio",
+                "variazione": 0,
+                "saldo_risultante": 1000
+            },
+            {
+                "gioco": "Roulette",
+                "variazione": -20,
+                "saldo_risultante": 980
+            },
+            {
+                "gioco": "Roulette",
+                "variazione": -20,
+                "saldo_risultante": 960
+            },
+            {
+                "gioco": "Dadi",
+                "variazione": 15,
+                "saldo_risultante": 975
+            },
+            {
+                "gioco": "Roulette",
+                "variazione": 0,
+                "saldo_risultante": 975
+            }
+        ]
     }
 }
